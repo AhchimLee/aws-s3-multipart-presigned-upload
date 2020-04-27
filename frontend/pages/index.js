@@ -6,6 +6,7 @@ export default class Index extends Component {
     super(props)
     this.state = {
       selectedFile: null,
+      fileUrl: null,
       uploadId: '',
       fileName: '',
       backendUrl: 'http://localhost:4000'   // set server.js public IP
@@ -22,8 +23,10 @@ export default class Index extends Component {
       // console.log('Inside fileChangedHandler')
       let selectedFile = event.target.files[0]
       let fileName = selectedFile.name
+      let fileUrl = URL.createObjectURL(selectedFile)
       this.setState({ selectedFile })
       this.setState({ fileName })
+      this.setState({ fileUrl })
     } catch (err) {
       console.error(err, err.message)
     }
@@ -145,6 +148,10 @@ export default class Index extends Component {
             <button type='submit'>
               Upload
             </button>
+          </div>
+          <div>
+            <br/>
+            <img src={this.state.fileUrl} height='250px'/>
           </div>
         </form>
       </div>
