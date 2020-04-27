@@ -2,20 +2,15 @@ const express = require('express')
 const app = express()
 const BluebirdPromise = require('bluebird')
 const AWS = require('aws-sdk')
+AWS.config.loadFromPath('./aws-config.json')
 const bodyParser = require('body-parser')
 
 app.use(bodyParser.json())
 
 const port = 4000
-const BUCKET_NAME = "vaultgovsg"
+const BUCKET_NAME = "<TEST_BUCKET_NAME>"
 
-const s3  = new AWS.S3({
-	accessKeyId: '<ACCESS_KEY_ID>' , // Replace with your access key id
-	secretAccessKey: '<SECRET_ACCESS_KEY>' , // Replace with your secret access key
-	endpoint: 'http://127.0.0.1:9000' ,
-	s3ForcePathStyle: true, // needed with minio?
-	signatureVersion: 'v4'
-});
+const s3  = new AWS.S3();
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -34,11 +29,16 @@ app.get('/start-upload', async (req, res, next) => {
 			Key: req.query.fileName,
 			ContentType: req.query.fileType
 		}
+		console.log("Bucket: ", BUCKET_NAME)
+		console.log("Key: ", req.query.fileName)
+		console.log("ContentType: ", req.query.fileType)
 		let createUploadPromised = BluebirdPromise.promisify(s3.createMultipartUpload.bind(s3))
 		let uploadData = await createUploadPromised(params)
+		console.log("uploadData: ", uploadData)
 		res.send({uploadId: uploadData.UploadId})
 	} catch(err) {
-		console.log(err)
+		res.send({err})
+		console.log("**** /start-upload err: ", err)
 	}
 })
 
@@ -50,18 +50,20 @@ app.get('/get-upload-url', async (req, res, next) => {
 			PartNumber: req.query.partNumber,
 			UploadId: req.query.uploadId
 		}
-		console.log(params)
-	    let uploadPartPromised = BluebirdPromise.promisify(s3.getSignedUrl.bind(s3))
-	    let presignedUrl = await uploadPartPromised('uploadPart', params)
+		console.log("**** /get-upload-url parameters: ", params)
+		let uploadPartPromised = BluebirdPromise.promisify(s3.getSignedUrl.bind(s3))
+		let presignedUrl = await uploadPartPromised('uploadPart', params)
+		console.log("presignedUrl: ", presignedUrl)
 		res.send({presignedUrl})
 	} catch(err) {
+		console.log("**** /get-upload-url err: ")
 		console.log(err)
 	}
 })
 
 app.post('/complete-upload', async (req, res, next) => {
 	try {
-		console.log(req.body, ': body')
+		console.log("**** body: ", req.body, ': body')
 		let params = {
 			Bucket: BUCKET_NAME,
 			Key: req.body.params.fileName,
@@ -70,12 +72,18 @@ app.post('/complete-upload', async (req, res, next) => {
 			},
 			UploadId: req.body.params.uploadId
 		}
-		console.log(params)
+		console.log("Bucket: ", BUCKET_NAME)
+		console.log("Key: ", req.body.params.fileName)
+		console.log("MultipartUpload: ", params.MultipartUpload)
+		console.log("UploadId: ", req.body.params.uploadId)
+
+		console.log("**** /complete-upload parameters: ", params)
 	    let completeUploadPromised = BluebirdPromise.promisify(s3.completeMultipartUpload.bind(s3))
-	    let data = await completeUploadPromised(params)
+		let data = await completeUploadPromised(params)
+		console.log("data: ", data)
 		res.send({data})
 	} catch(err) {
-		console.log(err)
+		console.log("**** /complete-upload err: ", err)
 	}
 })
 

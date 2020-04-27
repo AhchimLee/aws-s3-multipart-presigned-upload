@@ -3,12 +3,12 @@ import axios from 'axios'
 
 export default class Index extends Component {
 	constructor(props) {
-		super(props)
+    super(props)
     this.state = {
       selectedFile: null,
       uploadId: '',
       fileName: '',
-      backendUrl: 'http://localhost:4000'
+      backendUrl: 'http://localhost:4000'   // set server.js public IP
     }
 	}
 
@@ -52,6 +52,7 @@ export default class Index extends Component {
       this.setState({uploadId})
 
       this.uploadMultipartFile()
+      //alert(resp.status)
     } catch(err) {
       console.log(err)
     }
@@ -101,7 +102,6 @@ export default class Index extends Component {
           blob,
           { headers: { 'Content-Type': this.state.selectedFile.type } }
         )
-        // console.log('   Upload no ' + index + '; Etag: ' + uploadResp.headers.etag)
         promisesArray.push(uploadResp)
       }
 
@@ -127,7 +127,8 @@ export default class Index extends Component {
       })
 
       console.log(completeUploadResp.data, ' Stuff')
-
+      if(completeUploadResp.statusText=='OK')
+        alert("Complete Upload");
     } catch(err) {
       console.log(err)
     }
@@ -136,9 +137,10 @@ export default class Index extends Component {
 	render() {
 		return (
       <div>
+        <h1>S3 Post Upload</h1>
+        <hr/>
         <form onSubmit={this.startUpload.bind(this)}>
           <div>
-            <p>Upload Dataset:</p>
             <input type='file' id='file' onChange={this.fileChangedHandler.bind(this)} />
             <button type='submit'>
               Upload
