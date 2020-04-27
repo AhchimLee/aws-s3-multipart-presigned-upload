@@ -12,11 +12,29 @@ However, I hit a snag when dealing with files > 5GB because the pre-signed URL o
 
 * Frontend Server: React (Next.js)
 * Backend Server: Node.js (Express), using the AWS JS SDK
+* Storage Server: AWS S3 Bucket
 
 ### How to run
 
 * Clone the repo and change directory into the repo
 * Open two different terminal windows.
+
+**S3 Bucket**
+
+Set Bucket Permission > CORS configuration like below:
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<CORSConfiguration xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
+<CORSRule>
+    <AllowedOrigin>*</AllowedOrigin>
+    <AllowedMethod>POST</AllowedMethod>
+    <AllowedMethod>GET</AllowedMethod>
+    <AllowedMethod>PUT</AllowedMethod>
+    <ExposeHeader>etag</ExposeHeader>
+    <AllowedHeader>*</AllowedHeader>
+</CORSRule>
+</CORSConfiguration>
+```
 
 **Backend Server**
 
