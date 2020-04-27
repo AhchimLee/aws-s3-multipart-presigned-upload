@@ -8,7 +8,7 @@ const bodyParser = require('body-parser')
 app.use(bodyParser.json())
 
 const port = 4000
-const BUCKET_NAME = "<TEST_BUCKET_NAME>"
+const BUCKET_NAME = "<BUCKET_NAME>"
 
 const s3  = new AWS.S3();
 
