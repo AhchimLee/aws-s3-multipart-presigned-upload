@@ -37,7 +37,7 @@ const BUCKET_NAME = "<TEST_BUCKET_NAME>"
 ```
 
 In window 1, run:
-```
+```sh
 cd backend
 npm install
 node server.js
@@ -46,13 +46,13 @@ node server.js
 **Frontend Server**
 
 In window 2, run:
-```
+```sh
 cd frontend
 npm install
 npm run dev
 ```
-If it error ocurred, 
-also run this code:
+If it error ocurred,   
+also run this code:  
 `npm install axios --save`
 
 **Upload File**
