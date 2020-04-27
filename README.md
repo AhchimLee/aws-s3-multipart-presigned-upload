@@ -25,7 +25,7 @@ Replace the following code in `backend/aws-config.json` with your AWS S3.
 ```json
 { 
     "accessKeyId": "<ACCESS_KEY_ID>" ,
-	"secretAccessKey": "<SECRET_ACCESS_KEY>" ,
+    "secretAccessKey": "<SECRET_ACCESS_KEY>" ,
     "region": "ap-northeast-2", 
     "signatureVersion": "v4" 
 }
