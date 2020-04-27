@@ -149,9 +149,9 @@ export default class Index extends Component {
               Upload
             </button>
           </div>
+          <br/>
           <div>
-            <br/>
-            <img src={this.state.fileUrl} height='250px'/>
+            <img src={this.state.fileUrl} height='250px' style={{"border": "3px solid #efefef"}}/>
           </div>
         </form>
       </div>
