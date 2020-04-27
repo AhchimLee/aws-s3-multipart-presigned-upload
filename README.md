@@ -51,6 +51,9 @@ cd frontend
 npm install
 npm run dev
 ```
+If it error ocurred, 
+also run this code:
+`npm install axios --save`
 
 **Upload File**
 
