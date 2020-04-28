@@ -141,9 +141,8 @@ export default class Index extends Component {
 		return (
       <div>
         <h1>S3 Post Upload</h1>
-        <hr/>
         <form onSubmit={this.startUpload.bind(this)}>
-          <div>
+          <div style={{"border": "2px solid #636361", "border-radius": "10px", "padding": "7px", "display": "inline-block"}}>
             <input type='file' id='file' onChange={this.fileChangedHandler.bind(this)} />
             <button type='submit'>
               Upload
